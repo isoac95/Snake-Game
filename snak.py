@@ -3,6 +3,9 @@ from tkinter import *
 from tkinter import messagebox
 import time
 import random
+'''
+CHANGEEEEE!!!!!!!!!!
+'''
 
 class Snak:
     def __init__(self):
