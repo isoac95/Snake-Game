@@ -20,12 +20,12 @@ class Snak:
         self.cells = dict()
         self.canvas.bind("<Configure>", self.create_field)
         self.move = StringVar()
-        self.move.set("Stand still")
+        self.move.set(("Stand still",))
         self.move.trace("w", self.callback)
-        self.canvas.bind('<Left>', lambda event: self.move.set("Left"))
-        self.canvas.bind('<Right>', lambda event: self.move.set("Right"))
-        self.canvas.bind('<Up>', lambda event: self.move.set("Up"))
-        self.canvas.bind('<Down>', lambda event: self.move.set("Down"))
+        self.canvas.bind('<Left>', lambda event: self.move.set(("Left", self.move.get()[0])))
+        self.canvas.bind('<Right>', lambda event: self.move.set(("Right", self.move.get()[0])))
+        self.canvas.bind('<Up>', lambda event: self.move.set(("Up", self.move.get()[0])))
+        self.canvas.bind('<Down>', lambda event: self.move.set(("Down", self.move.get()[0])))
         self.canvas.after(0, self.animate)
         self.root.mainloop()
 
@@ -73,15 +73,15 @@ class Snak:
         self.canvas.after(100, self.animate) #12
 
     def move_direction(self, direction):
-        if direction == "Stand still":
+        if direction[0] == "Stand still":
             self.canvas.move(self.head, 0, 0)
-        elif direction == "Left":
+        elif direction[0] == "Left" and direction[1] != "Right":
             self.canvas.move(self.head, -25, 0)
-        elif direction == "Up":
+        elif direction[0] == "Up" and direction[1] != "Down":
             self.canvas.move(self.head, 0, -25)
-        elif direction == "Down":
+        elif direction[0] == "Down" and direction[1] != "Up":
             self.canvas.move(self.head, 0, 25)
-        else:
+        elif direction[0] == "Right" and direction[1] != "Left":
             self.canvas.move(self.head, 25, 0)
 
     def reset(self):
