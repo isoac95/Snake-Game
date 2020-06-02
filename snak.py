@@ -22,6 +22,7 @@ class Snak:
         self.columns = 20
         self.cells = dict()
         self.canvas.bind("<Configure>", self.create_field)
+        self.last_command = ""
         self.move = StringVar()
         self.move.set("Stand still")
         self.move.trace("w", self.callback)
@@ -48,7 +49,7 @@ class Snak:
                     cell = self.canvas.create_rectangle(x1,y1,x2,y2, fill="SpringGreen3", tags="rect", outline="")
                 self.cells["i" + str(i) + "j" + str(j)] = cell
                 self.canvas.tag_bind(cell, "<1>", lambda event, row=i, column=j: self.clicked(row, column))
-                print("created field:", i, j)
+                #print("created field:", i, j)
         self.pos = (random.randint(0,19), random.randint(0,19))
         self.food = self.canvas.create_oval(self.pos[0]*25, self.pos[1]*25, self.pos[0]*25+25, self.pos[1]*25+25, fill="OrangeRed2", outline="")
         self.head = self.canvas.create_oval(250, 250, 275, 275, fill="RoyalBlue2", outline="")
@@ -58,7 +59,10 @@ class Snak:
 
     def animate(self):
         self.canvas.update()
-        self.move_direction(self.move.get())
+        if self.last_command == self.move.get():
+            self.move_direction(self.move.get())
+        else:
+            self.move_direction(self.last_command)
         position = self.canvas.coords(self.head)
         if position[0] < 0 or position[2] > self.width or position[1] < 0 or position[3] > self.height:
             self.move.set("Stand still")
@@ -84,7 +88,7 @@ class Snak:
             self.canvas.move(self.head, 0, -25)
         elif direction == "Down":
             self.canvas.move(self.head, 0, 25)
-        else:
+        elif direction == "Right":
             self.canvas.move(self.head, 25, 0)
 
     def reset(self):
@@ -94,8 +98,19 @@ class Snak:
         self.pos = (random.randint(0,19), random.randint(0,19))
         self.food = self.canvas.create_oval(self.pos[0]*25, self.pos[1]*25, self.pos[0]*25+25, self.pos[1]*25+25, fill="OrangeRed2", outline="")
         self.head = self.canvas.create_oval(250, 250, 275, 275, fill="RoyalBlue2", outline="")
+        self.last_command = ""
 
     def callback(self, *args):
-        print(self.move.get())
+        print("Current command: {}, previos command: {}".format(self.move.get(), self.last_command))
+        if self.last_command == "":
+            self.last_command = self.move.get()
+        elif self.last_command == "Left" and self.move.get() != "Right":
+            self.last_command = self.move.get()
+        elif self.last_command == "Right" and self.move.get() != "Left":
+            self.last_command = self.move.get()
+        elif self.last_command == "Up" and self.move.get() != "Down":
+            self.last_command = self.move.get()
+        elif self.last_command == "Down" and self.move.get() != "Up":
+            self.last_command = self.move.get()
 
 Snak()
