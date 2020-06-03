@@ -7,13 +7,18 @@ import random
 class Snak:
     def __init__(self):
         self.root = tk.Tk()
-        self.root.title("Snake game")
-        self.root.configure(bg="dark goldenrod")
+        self.root.title("Snake game by Ante Culo")
+        self.root.configure(bg="SpringGreen2")
+        self.score = 0
+        self.high_score = 0
+        self.label = tk.Label(self.root, text="High score: {}\nCurrent score: {}".format(self.high_score, self.score), fg="white", bg="SpringGreen2", font=("Arial", 15))
+        self.label.pack()
+        self.frame = tk.Frame(self.root, bg="dark goldenrod")
+        self.frame.pack()
         self.width = 500
         self.height = 500
-        self.score = 0
         #self.position = [250, 250, 275, 275] #do i need this?
-        self.canvas = tk.Canvas(self.root, width=self.width, height=self.height, relief="flat", bd=0, highlightthickness=0) #padx=10, pady=10, highlightcolor="red", relief="groove", bd=0
+        self.canvas = tk.Canvas(self.frame, width=self.width, height=self.height, relief="flat", bd=0, highlightthickness=0) #padx=10, pady=10, highlightcolor="red", relief="groove", bd=0
         self.canvas.focus_set()
         self.canvas.pack(padx=5, pady=5)
         self.rows = 20
@@ -82,6 +87,7 @@ class Snak:
                 exit()
         if position == self.canvas.coords(self.food):
             self.score += 1
+            self.label.configure(text="High score: {}\nCurrent score: {}".format(self.high_score, self.score))
             print(self.score)
             self.create_food(lst_of_pos)
             #self.canvas.delete(self.food)
@@ -114,7 +120,10 @@ class Snak:
         self.canvas.delete(self.food)
         for item in self.lst:
             self.canvas.delete(item[0])
+        if self.score > self.high_score:
+            self.high_score = self.score
         self.score = 0
+        self.label.configure(text="High score: {}\nCurrent score: {}".format(self.high_score, self.score))
         self.pos = (random.randint(0,19), random.randint(0,19))
         self.food = self.canvas.create_oval(self.pos[0]*25, self.pos[1]*25, self.pos[0]*25+25, self.pos[1]*25+25, fill="OrangeRed2", outline="")
         self.head = self.canvas.create_oval(250, 250, 275, 275, fill="RoyalBlue3", outline="")
