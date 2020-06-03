@@ -12,7 +12,7 @@ class Snak:
         self.width = 500
         self.height = 500
         self.score = 0
-        self.position = [250, 250, 275, 275]
+        #self.position = [250, 250, 275, 275] #do i need this?
         self.canvas = tk.Canvas(self.root, width=self.width, height=self.height, relief="flat", bd=0, highlightthickness=0) #padx=10, pady=10, highlightcolor="red", relief="groove", bd=0
         self.canvas.focus_set()
         self.canvas.pack(padx=5, pady=5)
@@ -66,10 +66,14 @@ class Snak:
         else:
             self.move_direction(self.last_command)
         position = self.canvas.coords(self.head)
-        if position != self.position:
-            print(position)
-            self.position = position
-        if position[0] < 0 or position[2] > self.width or position[1] < 0 or position[3] > self.height:
+        lst_of_pos = list()
+        for index in range(1, len(self.lst)):
+            lst_of_pos.append(self.lst[index][1])
+        #for item in
+        #if position != self.position:
+            #print(position)
+            #self.position = position
+        if position[0] < 0 or position[2] > self.width or position[1] < 0 or position[3] > self.height or position in lst_of_pos:
             self.move.set("Stand still")
             answer = messagebox.askretrycancel("Game over!", "Better luck next time :P")
             if answer:
@@ -79,9 +83,10 @@ class Snak:
         if position == self.canvas.coords(self.food):
             self.score += 1
             print(self.score)
-            self.canvas.delete(self.food)
-            self.pos = (random.randint(0,19), random.randint(0,19))
-            self.food = self.canvas.create_oval(self.pos[0]*25, self.pos[1]*25, self.pos[0]*25+25, self.pos[1]*25+25, fill="OrangeRed2", outline="")
+            self.create_food(lst_of_pos)
+            #self.canvas.delete(self.food)
+            #self.pos = (random.randint(0,19), random.randint(0,19))
+            #self.food = self.canvas.create_oval(self.pos[0]*25, self.pos[1]*25, self.pos[0]*25+25, self.pos[1]*25+25, fill="OrangeRed2", outline="")
             self.lst.append([self.canvas.create_oval(1000, 1000, 1025, 1025, fill="RoyalBlue2", outline=""), [175, 250, 200, 275]])
         self.canvas.after(100, self.animate) #12
 
@@ -119,8 +124,17 @@ class Snak:
         [self.canvas.create_oval(175, 250, 200, 275, fill="RoyalBlue2", outline=""), [175, 250, 200, 275]]]
         self.last_command = ""
 
+    def create_food(self, snake_position):
+        self.canvas.delete(self.food)
+        self.pos = (random.randint(0,19), random.randint(0,19))
+        if [self.pos[0]*25, self.pos[1]*25, self.pos[0]*25+25, self.pos[1]*25+25] not in snake_position:
+            self.food = self.canvas.create_oval(self.pos[0]*25, self.pos[1]*25, self.pos[0]*25+25, self.pos[1]*25+25, fill="OrangeRed2", outline="")
+        else:
+            print("Aktiviralo se braco")
+            self.create_food(snake_position)
+
     def callback(self, *args):
-        print("Current command: {}, previos command: {}".format(self.move.get(), self.last_command))
+        #print("Current command: {}, previos command: {}".format(self.move.get(), self.last_command))
         if self.last_command == "":
             self.last_command = self.move.get()
         elif self.last_command == "Left" and self.move.get() != "Right":
