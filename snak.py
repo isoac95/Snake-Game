@@ -3,9 +3,6 @@ from tkinter import *
 from tkinter import messagebox
 import time
 import random
-'''
-CHANGEEEEE!!!!!!!!!!
-'''
 
 class Snak:
     def __init__(self):
@@ -17,7 +14,7 @@ class Snak:
         self.score = 0
         self.canvas = tk.Canvas(self.root, width=self.width, height=self.height, relief="flat", bd=0, highlightthickness=0) #padx=10, pady=10, highlightcolor="red", relief="groove", bd=0
         self.canvas.focus_set()
-        self.canvas.grid(padx=5, pady=5)  #pack
+        self.canvas.pack(padx=5, pady=5)  #grid
         self.rows = 20
         self.columns = 20
         self.cells = dict()
