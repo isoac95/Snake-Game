@@ -11,7 +11,7 @@ class Snak:
         self.root.configure(bg="SpringGreen2")
         self.score = 0
         self.high_score = 0
-        self.label = tk.Label(self.root, text="High score: {}\nCurrent score: {}".format(self.high_score, self.score), fg="white", bg="SpringGreen2", font=("Arial", 15))
+        self.label = tk.Label(self.root, text="Use arrow keys for\nsnake movement!", fg="white", bg="SpringGreen2", font=("Arial", 15))
         self.label.pack()
         self.frame = tk.Frame(self.root, bg="dark goldenrod")
         self.frame.pack()
@@ -22,7 +22,6 @@ class Snak:
         self.canvas.pack(padx=5, pady=5)
         self.rows = 20
         self.columns = 20
-        self.cells = dict()
         self.canvas.bind("<Configure>", self.create_field)
         self.last_command = ""
         self.move = StringVar()
@@ -37,7 +36,7 @@ class Snak:
 
     def create_field(self, event=None):
         cellwidth = int(self.canvas.winfo_width()/self.columns)
-        cellheight = int(self.canvas.winfo_height()/self.columns)
+        cellheight = int(self.canvas.winfo_height()/self.rows)
         for i in range(self.columns):
             for j in range(self.rows):
                 x1 = j * cellwidth
@@ -79,7 +78,7 @@ class Snak:
             print(self.score)
             self.create_food(lst_of_pos)
             self.lst.append([self.canvas.create_oval(1000, 1000, 1025, 1025, fill="RoyalBlue2", outline=""), [175, 250, 200, 275]])
-        self.canvas.after(100, self.animate) #12
+        self.canvas.after(100, self.animate)
 
     def move_direction(self, direction):
         if direction == "Stand still":
@@ -129,7 +128,6 @@ class Snak:
         if [self.pos[0]*25, self.pos[1]*25, self.pos[0]*25+25, self.pos[1]*25+25] not in snake_position:
             self.food = self.canvas.create_oval(self.pos[0]*25, self.pos[1]*25, self.pos[0]*25+25, self.pos[1]*25+25, fill="OrangeRed2", outline="")
         else:
-            print("Aktiviralo se braco")
             self.create_food(snake_position)
 
     def callback(self, *args):
