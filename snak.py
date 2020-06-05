@@ -85,7 +85,12 @@ class Snak:
         if direction == "Stand still":
             self.canvas.move(self.head, 0, 0)
         elif direction == "Left":
-            self.canvas.move(self.head, -25, 0)
+            if len(self.lst) == 4 and self.canvas.coords(self.head) == [250, 250, 275, 275] and self.lst[1][1] == [225, 250, 250, 275]:
+                self.move.set("Stand still")
+                self.last_command = ""
+                self.canvas.move(self.head, 0, 0)
+            else:
+                self.canvas.move(self.head, -25, 0)
         elif direction == "Up":
             self.canvas.move(self.head, 0, -25)
         elif direction == "Down":
