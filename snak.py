@@ -1,8 +1,7 @@
 import tkinter as tk
-from tkinter import *
 from tkinter import messagebox
-import time
 import random
+
 
 class Snak:
     def __init__(self):
@@ -17,14 +16,14 @@ class Snak:
         self.frame.pack()
         self.width = 500
         self.height = 500
-        self.canvas = tk.Canvas(self.frame, width=self.width, height=self.height, relief="flat", bd=0, highlightthickness=0) #padx=10, pady=10, highlightcolor="red", relief="groove", bd=0
+        self.canvas = tk.Canvas(self.frame, width=self.width, height=self.height, relief="flat", bd=0, highlightthickness=0)  # padx=10, pady=10, highlightcolor="red", relief="groove", bd=0
         self.canvas.focus_set()
         self.canvas.pack(padx=5, pady=5)
         self.rows = 20
         self.columns = 20
         self.canvas.bind("<Configure>", self.create_field)
         self.last_command = ""
-        self.move = StringVar()
+        self.move = tk.StringVar()
         self.move.set("Stand still")
         self.move.trace("w", self.callback)
         self.canvas.bind('<Left>', lambda event: self.move.set("Left"))
@@ -44,16 +43,18 @@ class Snak:
                 x2 = x1 + cellwidth
                 y2 = y1 + cellheight
                 if (i + j) % 2 == 0:
-                    cell = self.canvas.create_rectangle(x1,y1,x2,y2, fill="SpringGreen2", tags="rect", outline="")
+                    self.canvas.create_rectangle(x1, y1, x2, y2, fill="SpringGreen2", tags="rect", outline="")
                 else:
-                    cell = self.canvas.create_rectangle(x1,y1,x2,y2, fill="SpringGreen3", tags="rect", outline="")
-        self.pos = (random.randint(0,19), random.randint(0,19))
+                    self.canvas.create_rectangle(x1, y1, x2, y2, fill="SpringGreen3", tags="rect", outline="")
+        self.pos = (random.randint(0, 19), random.randint(0, 19))
         self.food = self.canvas.create_oval(self.pos[0]*25, self.pos[1]*25, self.pos[0]*25+25, self.pos[1]*25+25, fill="OrangeRed2", outline="")
         self.head = self.canvas.create_oval(250, 250, 275, 275, fill="RoyalBlue3", outline="")
-        self.lst = [[self.head, [250, 250, 275, 275]],
-        [self.canvas.create_oval(225, 250, 250, 275, fill="RoyalBlue2", outline=""),[225, 250, 250, 275]],
-        [self.canvas.create_oval(200, 250, 225, 275, fill="RoyalBlue2", outline=""), [200, 250, 225, 275]],
-        [self.canvas.create_oval(175, 250, 200, 275, fill="RoyalBlue2", outline=""), [175, 250, 200, 275]]]
+        self.lst = [
+                    [self.head, [250, 250, 275, 275]],
+                    [self.canvas.create_oval(225, 250, 250, 275, fill="RoyalBlue2", outline=""), [225, 250, 250, 275]],
+                    [self.canvas.create_oval(200, 250, 225, 275, fill="RoyalBlue2", outline=""), [200, 250, 225, 275]],
+                    [self.canvas.create_oval(175, 250, 200, 275, fill="RoyalBlue2", outline=""), [175, 250, 200, 275]]
+                    ]
 
     def animate(self):
         self.canvas.update()
@@ -113,13 +114,15 @@ class Snak:
             self.high_score = self.score
         self.score = 0
         self.label.configure(text="High score: {}\nCurrent score: {}".format(self.high_score, self.score))
-        self.pos = (random.randint(0,19), random.randint(0,19))
+        self.pos = (random.randint(0, 19), random.randint(0, 19))
         self.food = self.canvas.create_oval(self.pos[0]*25, self.pos[1]*25, self.pos[0]*25+25, self.pos[1]*25+25, fill="OrangeRed2", outline="")
         self.head = self.canvas.create_oval(250, 250, 275, 275, fill="RoyalBlue3", outline="")
-        self.lst = [[self.head, [250, 250, 275, 275]],
-        [self.canvas.create_oval(225, 250, 250, 275, fill="RoyalBlue2", outline=""),[225, 250, 250, 275]],
-        [self.canvas.create_oval(200, 250, 225, 275, fill="RoyalBlue2", outline=""), [200, 250, 225, 275]],
-        [self.canvas.create_oval(175, 250, 200, 275, fill="RoyalBlue2", outline=""), [175, 250, 200, 275]]]
+        self.lst = [
+                    [self.head, [250, 250, 275, 275]],
+                    [self.canvas.create_oval(225, 250, 250, 275, fill="RoyalBlue2", outline=""),[225, 250, 250, 275]],
+                    [self.canvas.create_oval(200, 250, 225, 275, fill="RoyalBlue2", outline=""), [200, 250, 225, 275]],
+                    [self.canvas.create_oval(175, 250, 200, 275, fill="RoyalBlue2", outline=""), [175, 250, 200, 275]]
+                    ]
         self.last_command = ""
 
     def create_food(self, snake_position):
@@ -131,7 +134,7 @@ class Snak:
             self.create_food(snake_position)
 
     def callback(self, *args):
-        #print("Current command: {}, previos command: {}".format(self.move.get(), self.last_command))
+        # print("Current command: {}, previos command: {}".format(self.move.get(), self.last_command))
         if self.last_command == "":
             self.last_command = self.move.get()
         elif self.last_command == "Left" and self.move.get() != "Right":
@@ -143,4 +146,6 @@ class Snak:
         elif self.last_command == "Down" and self.move.get() != "Up":
             self.last_command = self.move.get()
 
-Snak()
+
+if __name__ == '__main__':
+    Snak()
